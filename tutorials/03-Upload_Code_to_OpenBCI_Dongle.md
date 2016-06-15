@@ -18,16 +18,26 @@ This page covers how the radio link works, and how to upload new firmware to the
 * Custom RFduino libraries for OpenBCI
 * A 0.1uF capacitor (see Device section below)
 
-Download and install the Arduino BETA IDE. This is the one that works with the custom RFduino libraries that we install in the next step.
+Download and install the Arduino 1.5.8 BETA IDE. On Windows be sure to download the file marked `Windows Installer`. 
 
+Download the [OpenBCI_Radios](https://github.com/OpenBCI/OpenBCI_Radios) repo from our github. 
 
-Download the [OpenBCI_Radios](https://github.com/OpenBCI/OpenBCI_Radios) repo from our github, and place it in the proper location depending upon your OS.
+Unzip the folder, and if it is named OpenBCI_Radios-master, rename it to just OpenBCI_Radios. 
 
-	On a Mac, put the RFduino folder and everything it contains in
-	/Applications/Arduino.app/Contents/Resources/Java/hardware/arduino
+Now move the folder from OpenBCI_Radios/libraries called RFduino to:
+On a Mac, put the RFduino folder and everything it contains in
+/Applications/Arduino.app/Contents/Resources/Java/hardware/arduino
 
-	On a Windows, put the RFduino folder and everything it contains in
-	C\Program Files (x86)\Arduino-1.5.x\hardware\arduino
+On a Windows, put the RFduino folder and everything it contains in
+C:\Program Files (x86)\Arduino-1.5.x\hardware\arduino
+
+Move the OpenBCI_Radios file from your downloads into:
+On Mac:
+// TODO: file location for mac
+On Windows:
+C:\Users\username\Documents\Arduino\libraries
+
+Open the Arduino IDE, restart the Arduino IDE if it was open. 
 
 The files contained in the RFduino folder are custom builds for OpenBCI by our good friends over at RFdigital. Those guys are great! They helped us to squeeze all of the speed we could get out of the RFduinoGZLL library, and also gave us access to 25 discreet channels for OpenBCI boards to work on. ROCK!
 
@@ -35,7 +45,21 @@ The files contained in the RFduino folder are custom builds for OpenBCI by our g
 
 ![DongleBack](../assets/images/dongleBack.jpg)
 
-This process does not require 3rd party hardware. Before you begin, note that there is a switch on the dongle that allows for selection between **RESET** and **GPIO6**. This switch routes the DTR pin from the FTDI chip to either RESET or GPIO6 pin on the RFduino module. Whe the switch is in the GPIO6 position, the Dongle is ready for general communication, code upload, and streamingData mode to the OpenBCI Board. When the switch is in the RESET position, it is possible to upload code to the RFduino right there on the Dongle.
+This process does not require 3rd party hardware. Before you begin, note that there is a switch on the dongle that allows for selection between **RESET** and **GPIO6**. This switch routes the DTR pin from the FTDI chip to either RESET or GPIO6 pin on the RFduino module. When the switch is in the GPIO6 position, the Dongle is ready for general communication, code upload, and streamingData mode to the OpenBCI Board. When the switch is in the RESET position, it is possible to upload code to the RFduino right there on the Dongle.
+
+In the Arduino IDE 1.5.8 go `File-->Examples-->OpenBCI_Radios-->RadioHost32bit` which will launch the Host firmware. 
+
+Then go to `Tools-->Board` and select `RFduino`.
+
+Plug the Dongle into your computer. Flip the switch to the reset position if it is not already.
+
+Now go `Tools-->Port` and select the `COM` port for your device.
+
+Click the checkbox in the top left to verify everything is ready. If you see `Done Compiling` then you are ready to go!
+
+Choose a channel number for your device. The channel number can be set in the line of code `radio.begin(OPENBCI_MODE_HOST,20);`.
+ 
+Click the button to the right of the checkbox called upload. Your code is now uploading to the OpenBCI Dongle!
 
 If you want to modify the firmware that the OpenBCI Dongle came with, or roll your own, make sure that you are setting the RFduino up as a HOST, and that channel is selected correctly. The channel your boards were shipped with is noted on the anit-static baggie that it came in.
 
@@ -67,28 +91,40 @@ The idea here is to use the FTDI chip on the Dongle to bridge USB to Serial for 
 
 ![dongleWithHeaders](../assets/images/dongleHeaders.jpg)
 
-First, solder the headers that came with your OpenBCI Dongle. Then, move the switch to the RESET position, and upload some dummy code to the Dongle radio so that it doesn't interfere with the Serial upload process. We provide an Arduino sketch called OpenBCI_Dongle_PassThru.ino which makes this possible. Don't worry! You can re-load the Host code easily after programming the Device. After uploading, make sure to move the switch back over to the GPIO6 side!
+First, solder the headers that came with your OpenBCI Dongle. Then, move the switch to the RESET position, and upload some dummy code to the Dongle radio so that it doesn't interfere with the Serial upload process. Go to the Arduino IDE 1.5.8 and do `File-->Examples-->OpenBCI_Radios-->RadioPassThru32bit`. Now hit the upload button, it's the button to the left of the check mark in the top left of the IDE. After uploading, make sure to move the switch back over to the GPIO6 side!
 
 ![0.1uF capacitors](../assets/images/caps.jpg)
 
-The next thing you need are a handful of wires and a 0.1uF capacitor. 0.1uF capacitors are small and lentil-shaped, and have the number 104 printed on one side. You can get them at your local radio shack, or hobby electronics store. The 0.1uF capacitor needs to be in series between the Dongle GPIO6 pin and the OpenBCI Board RFRST pin.
+Next you need a breadboard, 8 jumpers and a 0.1uF capacitor. 0.1uF capacitors are small and lentil-shaped, and have the number 104 printed on one side. You can order them online from Amazon, eBay, or hobby electronics store. If you have blue buttons on your board you do not need the 0.1uF capacitor because it is already on the board. The 0.1uF capacitor needs to be in series between the Dongle GPIO6 pin and the OpenBCI Board RERST pin.
 
 ![Dongle Lash Up](../assets/images/DonglePassThruLashup.jpg)
 
-While you're at the store, might as well pick up some jumper wires and a breadboard, unless you got that kind of thing laying around... Here's a picture of the connections that you need to make. In this case, I am powering the OpenBCI board with the battery pack it came with, and so I only need these four connections to do the upload. I could also power the OpenBCI board with 3V from the Dongle, but that makes the next step abit trickier. In any case, these are the basic pin connections that you need to make when powering the board with a battery pack:
+Here's a picture of the connections that you need to make. Power the OpenBCI board with the battery pack it came with, and so you only need these four connections to do the upload. You could also power the OpenBCI board with 3V from the Dongle, but that makes the next step a bit trickier. In any case, these are the basic pin connections that you need to make when powering the board with a battery pack:
 
 * FTDI RX	-->	RF TX
 * FTDI TX	-->	RF RX
 * GPIO6	-->	0.1uF Cap	-->	RF RST
 * GND	-->	GND
 
+Now go to the Arduino IDE 1.5.8 and open the file called `RadioDevice32bit` by going to `File-->Examples-->OpenBCI_Radios-->RadioDevice32bit`. Make sure to use the same channel number for both the Host and the Device. 
+
+*Important!* As of firmware version 2, you must first flash the board with the line `radio.flashNonVolatileMemory();` in the `setup()` function uncommented, then comment the line back out and program again. It is very important that you reprogram the board with the line commented out. We must do this because with firmware version two, the channel number is stored to non-volatile memory so we can change the channel number of the system from the PC/Driver. 
+
+
 ![8bitDeviceConnection](../assets/images/8bitDeviceConnection.jpg)
 
-On The **8bit Board**, the pins you need to connect to are accessed from the TOP of the board. Insert the jumpers into the holes in the correct position, and press them tightly agains the sides of the holes to make a strong connection. Now, you can upload Device code to the RFduino on the OpenBCI 8bit Board!
+On The **8bit Board**, the pins you need to connect to are accessed from the TOP of the board. Insert the jumpers into the holes in the correct position, and press them tightly against the sides of the holes to make a strong connection. Now, you can upload Device code to the RFduino on the OpenBCI 8bit Board!
 
 ![32bitDeviceConnection](../assets/images/32bitDeviceConnection.jpg)
 
-On the **32bit Board** the pins you need to connect to are accessed from the BOTTOM of the board. Connect the jumper wires to the pads as shown and press tightly while uploading to the Device.
+On the **32bit Board** the pins you need to connect to are accessed from the BOTTOM of the board. Connect the jumper wires to the *center* of the pads as shown and press tightly while uploading to the Device. 
+Helpful tips: 
+* Use a 4pin female header to keep the wires in place
+* Don't move your hand at all
+* Place the board on a table or hard surface
+* Keep the pins straight up and *centered* on the pads. (perpendicular to the surface of the pads)
+
+There is a trick to it, it may take you a couple tries to get good at it. 
 
 ##Program Device Radio with Other FTDI Boards
 
@@ -98,7 +134,6 @@ There are many, many FTDI chip breakouts and cables out there that you can use. 
 ![RFduinoUSBshield](../assets/images/RFduinoUSBshield.jpg)
 
 RFduino makes a small board that they call a [USB Shield](http://www.rfduino.com/product/rfd22121-usb-shield-for-rfduino/index.html). The form-factor and pinout of the OpenBCI Dongle matches exactly the pinout of the RFduino USB Shield. It's almost like we planned it that way ;) The only thing to change, is that the GPIO6 is not the same as the OpenBCI Dongle. Connect the OpenBCI pin RF RST to the RFduino USB Shield pin RESET. And, you don't need to provide a 0.1uF cap, because **the USB Shield comes with the 0.1uF capacitor already installed!**
-
 
 ###FTDI Friend
 ![FTDI Friend](../assets/images/FTDI_Friend.jpg)
