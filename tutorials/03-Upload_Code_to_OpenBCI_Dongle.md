@@ -33,11 +33,13 @@ On a Mac, put the RFduino folder and everything it contains in
 On a Windows, put the RFduino folder and everything it contains in
 C:\Program Files (x86)\Arduino-1.5.x\hardware\arduino
 
-Move the OpenBCI_Radios file from your downloads into:
+Move the OpenBCI_Radios folder from your downloads into:
 On Mac:
-// TODO: file location for mac
+Documents/Arduino/libraries
 On Windows:
 C:\Users\username\Documents\Arduino\libraries
+
+If there is no 'libraries' folder in the sketch folder, create one.
 
 Open the Arduino IDE, restart the Arduino IDE if it was open.
 
