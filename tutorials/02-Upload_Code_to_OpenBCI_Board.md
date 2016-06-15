@@ -6,7 +6,7 @@ The OpenBCI 8bit and 32bit boards have powerful microcontrollers on them which s
 ##32bit Upload How-To
 **You will need:**
 
-* Computer running version [1.6.5](https://www.arduino.cc/en/Main/OldSoftwareReleases#previous) of Arduino IDE 
+* Computer running version [1.6.5](https://www.arduino.cc/en/Main/OldSoftwareReleases#previous) of Arduino IDE
 * OpenBCI Dongle connected to USB port
 * OpenBCI 32bit Board with battery power
 
@@ -20,18 +20,18 @@ https://www.arduino.cc/en/Main/OldSoftwareReleases#previous
 
 ***Note***: To upload code to the OpenBCI board, you need 1.6.5, while you need 1.5.8 to upload code to the dongle. If you have already installed 1.5.8, you may see an error message while installing 1.6.5 saying that you need to uninstall 1.5.8. Instead of doing that, simply move the existing "Arduino" program folder (which should be 1.5.8) in your Program Files to another folder (such as "Documents"). Go to your program manager (called "Change or Remove Program" in Windows, press Uninstall Arduino 1.6.5, and confirm if told that there was an error in uninstalling 1.6.5. Then, install 1.6.5. Rename the new "Arduino" program folder (which should now be 1.6.5) to "Arduino 1.6.5", and rename the Arduino folder that you moved to the name "Arduino 1.5.8". Move this folder back to your Program Files where "Arduino 1.6.5" is located, allowing you to keep both versions.
 
-You can find the latest OpenBCI firmware and libraries on our github repository. 
+Windows users: While installing 1.6.5 if the installer instructs you to uninstall 1.5.8, move the Arduino folder from `Program Files (x86)` to your downloads folder. Rename this folder to `Arduino_1.5.8`. Open the `Change or remove program` app in control panel and uninstall the Arduino application. There will be a popup indicating that the files do not exist and asking if you want to remove the program from the files list, select yes. Then install 1.6.5 as normal. Navigate to back to your `Program Files (x86)` folder and locate the Arduino folder. Rename this folder to `Arduino_1.6.5`. Now drag and drop the `Arduino_1.5.8` back into `Program Files (x86)` folder.  
+
+You can find the latest OpenBCI firmware and libraries on our github repository.
 
 https://github.com/OpenBCI/OpenBCI_32bit
 
 https://github.com/OpenBCI/OpenBCI_32bit_Libraries
 
 * OpenBCI_32bit
-	* This is the firmware that runs on the OpenBCI 32bit Board	
+	* This is the firmware that runs on the OpenBCI 32bit Board
 * OBCI_SD
 	* Supports writing raw data to on-board SD card
-* OpenBCI_32_Daisy
-	* The OpenBCI 32bit Library
 
 You will need to install the folders 'OpenBCI_32_Daisy' and 'OBCI_SD' from our Libraries repository into your Documents/Arduino/libraries folder. If there is no 'libraries' folder in the sketch folder, create one. Move the folder called 'OpenBCI_32bit' into your Documents/Arduino folder.
 
@@ -51,7 +51,7 @@ Make sure that the slide switch on the OpenBCI Dongle is switched to the GPIO6 s
 
 ![serial_port](../assets/images/PortSelect.png)
 
-Select the correct serial port for your OpenBCI Dongle. 
+Select the correct serial port for your OpenBCI Dongle.
 
 * On Macs, this will be named **/dev/tty.usbserial-DN00nnnn** where the nnnn is a combination of numbers and letters specific to your openBCI Dongle.
 
@@ -93,8 +93,8 @@ You will need to install these files from our repository into your Documents/ard
     * Supports writing raw data to on-board SD card
 * OpenBCI_8
     * The OpenBCI 8bit Library
-    
-    
+
+
 ![ArduinoIDE](../assets/images/Arduino_IDE.png)
 
 Move the file OpenBCI_8bit_SD.ino into your Documents/arduino folder, and start up the Arduino IDE. you should then see the sketch in your Sketch folder.
@@ -105,7 +105,7 @@ Select Arduino UNO from the Board drop-down menu.
 
 ![selectSerialPort](../assets/images/SerialPortSelect.png)
 
-Select the correct serial port for your OpenBCI Dongle. 
+Select the correct serial port for your OpenBCI Dongle.
 
 * On Macs, this will be named **/dev/tty.usbserial-DN00nnnn** where the nnnn is a combination of numbers and letters specific to your openBCI Dongle.
 
