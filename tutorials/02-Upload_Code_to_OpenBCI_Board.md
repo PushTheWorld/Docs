@@ -62,6 +62,8 @@ When you are happy with the code, simply press upload to program the OpenBCI 8bi
 First, install the version 1.6.5 of Arduino IDE which can be found here:
 
 https://www.arduino.cc/en/Main/OldSoftwareReleases#previous
+
+Windows users: While installing 1.6.5 if the installer instructs you to uninstall 1.5.8, move the Arduino folder from `Program Files (x86)` to your downloads folder. Rename this folder to `Arduino_1.5.8`. Open the `Change or remove program` app in control panel and uninstall the Arduino application. There will be a popup indicating that the files do not exist and asking if you want to remove the program from the files list, select yes. Then install 1.6.5 as normal. Navigate to back to your `Program Files (x86)` folder and locate the Arduino folder. Rename this folder to `Arduino_1.6.5`. Now drag and drop the `Arduino_1.5.8` back into `Program Files (x86)` folder.  
 	
 You can find the latest OpenBCI firmware and libraries on our github repository. 
 
@@ -73,8 +75,6 @@ https://github.com/OpenBCI/OpenBCI_32bit_Libraries
 	* This is the firmware that runs on the OpenBCI 32bit Board	
 * OBCI_SD
 	* Supports writing raw data to on-board SD card
-* OpenBCI_32_Daisy
-	* The OpenBCI 32bit Library
 
 You will need to install the folders 'OpenBCI_32_Daisy' and 'OBCI_SD' from our Libraries repository into your Documents/Arduino/libraries folder. If there is no 'libraries' folder in the sketch folder, create one. Move the folder called 'OpenBCI_32bit' into your Documents/Arduino folder.
 
