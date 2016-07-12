@@ -18,6 +18,7 @@ This page covers how the radio link works, and how to upload new firmware to the
 * Custom [RFduino libraries for OpenBCI](https://github.com/OpenBCI/OpenBCI_RFduino/archive/master.zip)
 * A 0.1uF capacitor (see Device section below)
 
+<<<<<<< HEAD
 **Steps:**
 
 1. Download and install the [Arduino IDE Version 1.5.8 BETA](http://www.arduino.cc/en/Main/OldSoftwareReleases#1.5.x).
@@ -38,14 +39,27 @@ This page covers how the radio link works, and how to upload new firmware to the
   On a Windows
 C:\Program Files (x86)\Arduino-1.5.x\hardware\arduino
 
+  On Linux, put the RFduino folder and everything it contains in
+arduino-1.5.8/hardware/arduino
+
+**NOTE FOR LINUX USERS**
+Linux users will need to have the program [wine](https://www.winehq.org/) installed in order to continue. There is a dependency for the arduino code that requires the running  `RFDLoader.exe` to continue. 
+In order to run this .exe, do the following:
+
+  1. Navigate to the /hardware/arduino/RFduino folder
+  2. Rename RFDLoader to RFDLoader.old (just in case)
+  3. Download [RFDLoader](../assets/RFDLoader)
+  4. Drag RFDLoader to the RFduino folder
+
+That's it! As long as `wine` is installed normally the script should take care of any issues you may have when uploading.
+
 5. Download the [OpenBCI_Radios](https://github.com/OpenBCI/OpenBCI_Radios) repo from our github. You may also clone the repo into your libraries folder cited after step 6.
 
 6. Unzip the folder, and if it is named OpenBCI_Radios-master, rename it to just OpenBCI_Radios.
 
-
 7. Move the OpenBCI_Radios folder from your downloads into:
 
-   On Mac:
+   On Mac/Linux:
 Documents/Arduino/libraries
 
    On Windows:
@@ -70,11 +84,11 @@ The idea here is to use the FTDI chip on the Dongle to bridge USB to Serial for 
 
 ![dongleWithHeaders](../assets/images/dongleHeaders.jpg)
 
-First, solder the headers that came with your OpenBCI Dongle. Then, move the switch to the RESET position, and upload some dummy code to the Dongle radio so that it doesn't interfere with the Serial upload process. Go to the Arduino IDE 1.5.8 and do `File-->Examples-->OpenBCI_Radios-->RadioPassThru32bit`. Now hit the upload button, it's the button to the left of the check mark in the top left of the IDE. After uploading, make sure to move the switch back over to the GPIO6 side!
+First, solder the headers that came with your OpenBCI Dongle. Then, move the switch to the RESET position, and upload some dummy code to the Dongle radio so that it doesn't interfere with the Serial upload process. Go to the Arduino IDE 1.5.8 and do `File-->Examples-->OpenBCI_Radios-->RadioPassThru32bit`. Now hit the upload button, it's the button to the right of the check mark in the top left of the IDE. After uploading, make sure to move the switch back over to the GPIO6 side!
 
 ![0.1uF capacitors](../assets/images/caps.jpg)
 
-Next you need a breadboard, 8 jumpers and a 0.1uF capacitor. 0.1uF capacitors are small and lentil-shaped, and have the number 104 printed on one side. You can order them online from Amazon, eBay, or hobby electronics store. If you have blue buttons on your board you do not need the 0.1uF capacitor because it is already on the board. The 0.1uF capacitor needs to be in series between the Dongle GPIO6 pin and the OpenBCI Board RERST pin.
+Next you need a breadboard, 8 jumpers and a 0.1uF capacitor. 0.1uF capacitors are small and lentil-shaped, and have the number 104 printed on one side. You can order them online from Amazon, eBay, or hobby electronics store. If you have blue buttons on your board you do not need the 0.1uF capacitor because it is already on the board. The 0.1uF capacitor needs to be in series between the Dongle GPIO6 pin and the OpenBCI Board RESET pin.
 
 ![Dongle Lash Up](../assets/images/DonglePassThruLashup.jpg)
 
