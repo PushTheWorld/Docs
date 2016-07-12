@@ -18,7 +18,6 @@ This page covers how the radio link works, and how to upload new firmware to the
 * Custom [RFduino libraries for OpenBCI](https://github.com/OpenBCI/OpenBCI_RFduino/archive/master.zip)
 * A 0.1uF capacitor (see Device section below)
 
-<<<<<<< HEAD
 **Steps:**
 
 1. Download and install the [Arduino IDE Version 1.5.8 BETA](http://www.arduino.cc/en/Main/OldSoftwareReleases#1.5.x).
