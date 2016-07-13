@@ -203,8 +203,43 @@ Use 16 channels.
 
 *Note: On reset, the OpenBCI 32bit board will 'sniff' for the Daisy Module, and if it is present, it will default to 16 channel capability.*
 
+##Radio Configuration Commands 
+As of firmware version 2.0, a set of commands has been implemented to change the radio system and improve over-the-air programming of the main OpenBCI board. 
+In order to use the commands you must keep to the form of key-code-(payload) where key is`0xF0`, code is defined below and payload is optional and dependent on the code. For example, to get system status send `0xF0` then send `0x07`. 
+
+####Get Channel Number `0x00`
+Returns either success or failure. If you get a failure, it will give you the host channel number and a failure message. If success it gives you both host and device channel numbers and a success message. Channel numbers can only be 1-25. The byte before EOT ($$$) will contain the channel number value in HEX.
+
+####Set Channel Number `0x01`
+Returns either success or failure. On failure it will ask you to verify the channel number and print a failure message. On success, it gives you both host and device channel numbers and a success message. Channel numbers can only be 1-25. The byte before EOT ($$$) will contain the channel number value in HEX.
+
+**EXAMPLE**
+User sends **0xF0** **0x01** **0x07** to set the system to channel 7
+
+####Channel Set Override `0x02`
+Returns either success or failure. On failure it will ask you to verify the channel number and print a failure message. If success it sends "Host Override" followed by the channel number. Channel numbers can only be 1-25. The byte before EOT ($$$) will contain the channel number value in HEX.
+
+####Get Poll Time `0x03`
+Returns success followed by the poll time in HEX.
+
+####Set Poll Time `0x04`
+Returns either success or failure. On failure it will send a "Communications Timeout" message. On success it sends success followed by the poll time in HEX. Values sent must be from 0-255 and must be sent in HEX. Defaults to 80ms.
+
+**EXAMPLE**
+User sends **0xF0** **0x04** **0xA0** which sets the poll time to 160ms.
+
+####Set BAUD to Default (115200) `0x05`
+Returns success and sends the BAUD rate in ASCII (115200).
+
+####Set BAUD to High-Speed mode (230400) `0x06`
+Returns success and sends the BAUD rate in ASCII (230400).
+
+####Check if System is Up `0x07`
+Returns success or failure. On failure it will send a "system is down" message. On success, it will send a "system is up" message.
+
+
 ##Unused ASCII Characters
 These are currently unused characters across the OpenBCI platforms:
 
 
-**~ ` 9 ( ) _ { } o O f g h k l ; : ' " V n N M , < . > / (space)**
+**~ ` 9 ( ) _ { } o O f g h k l ; : ' " V n N M , . / (space)**
