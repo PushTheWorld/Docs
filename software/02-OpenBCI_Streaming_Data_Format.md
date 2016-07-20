@@ -73,20 +73,22 @@ AZ1-AZ0: Data value for accelerometer channel Z
 
 #### Firmware Version 2 (Fall 2016 to Now)
 
-Stop Byte | Byte 27 | Byte 28 | Byte 29 | Byte 30 | Byte 31 | Byte 32
---------- |:-------:|:-------:|:-------:|:-------:|:-------:|:------:
-0xC0 | AX1 | AX0 | AY1 | AY0 | AZ1 | AZ0
-0xC1 | UDF | UDF | UDF | UDF | UDF | UDF
-0xC2 | UDF | UDF | UDF | UDF | UDF | UDF
-0xC3 | AC | AV | T4 | T3 | T1 | T0
-0xC4 | AC | AV | T4 | T3 | T1 | T0
-0xC5 | UDF | UDF | T4 | T3 | T1 | T0
-0xC6 | UDF | UDF | T4 | T3 | T1 | T0
+Stop Byte | Byte 27 | Byte 28 | Byte 29 | Byte 30 | Byte 31 | Byte 32 | Name
+--------- |:-------:|:-------:|:-------:|:-------:|:-------:|:------:|---
+0xC0 | AX1 | AX0 | AY1 | AY0 | AZ1 | AZ0| Standard with accel
+0xC1 | UDF | UDF | UDF | UDF | UDF | UDF | Standard with raw aux
+0xC2 | UDF | UDF | UDF | UDF | UDF | UDF | User defined
+0xC3 | AC | AV | T4 | T3 | T1 | T0 | Time stamped **_set_** with accel
+0xC4 | AC | AV | T4 | T3 | T1 | T0 | Time stamped with accel
+0xC5 | UDF | UDF | T4 | T3 | T1 | T0 | Time stamped **_set_** with raw aux
+0xC6 | UDF | UDF | T4 | T3 | T1 | T0 | Time stamped with raw aux
 
 AX1-AX0: Data value for accelerometer channel X
 AY1-AY0: Data value for accelerometer channel Y
 AZ1-AZ0: Data value for accelerometer channel Z
-AC: Code to interpret AV
+
+We can still fit a 25Hz accelerometer in with time stamps due to some interlacing and timing constraints. Since we stream channel data at 250Hz and accelerometer at 25Hz; we have essentially 10 samples to send the accelerometer data in. When a `0xC3` or `0xC4` you should parse _Byte 27_ to indicate what _Byte 28_ is:
+
 AC | AV
 --- | ---
 'X' | AX1
@@ -95,6 +97,10 @@ AC | AV
 'y' | AY0
 'Z' | AZ1
 'z' | AZ0
+
+Where _AC_ stands for accel code and is an ASCII character. An upper case signifies that _Byte 28_ is the upper 8 bits of the 16 bit signed integer, while a lower case character represents the lower 8 bits of the 16 bit signed integer. You combine both bytes to form the one number. For example, let's say a sample comes in with _AC_ equal to 'X', we would then store the value in _AV_ to a temporary variable. The next sample comes in with 'x' for it's _AC_ byte, we would then combine this sample's _Byte 28_ with the previous sample's _Byte 28_ and then convert as described in the section below called _16-Bit Signed Data Values_.
+
+
 
 **Note** UDF stands for User Defined.
 
