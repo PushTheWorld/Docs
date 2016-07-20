@@ -15,30 +15,35 @@ This page covers how the radio link works, and how to upload new firmware to the
 
 * Computer (Windows or Mac or Other)
 * Arduino IDE Version 1.5.8 BETA
-* Custom RFduino libraries for OpenBCI
+* Custom [RFduino libraries for OpenBCI](https://github.com/OpenBCI/OpenBCI_RFduino/archive/master.zip)
 * A 0.1uF capacitor (see Device section below)
 
 **Steps:**
 
-1. Download and install the [Arduino IDE Version 1.5.8 BETA](http://www.arduino.cc/en/Main/OldSoftwareReleases#1.5.x). 
+1. Download and install the [Arduino IDE Version 1.5.8 BETA](http://www.arduino.cc/en/Main/OldSoftwareReleases#1.5.x).
 
-   On Windows be sure to download the file marked `Windows Installer`. 
-   
+   On Windows be sure to download the file marked `Windows Installer`.
+
    On Mac download the `MAC OS X` version, unzip the app and move it into Applications folder, and then install Java 6 if prompted.
 
-2. Download the [OpenBCI_Radios](https://github.com/OpenBCI/OpenBCI_Radios) repo from our github.
+2. Download the [OpenBCI_RFduino](https://github.com/OpenBCI/OpenBCI_RFduino/archive/master.zip) repo from our github.
 
-3. Unzip the folder, and if it is named OpenBCI_Radios-master, rename it to just OpenBCI_Radios.
+3. Unzip the folder.
 
-4. Now move the folder from OpenBCI_Radios/libraries called RFduino to:
+4. Now move the folder called RFduino and everything it contains to:
 
-   On a Mac, move the RFduino folder and everything it contains in
+  On a Mac
 /Applications/Arduino.app/Contents/Resources/Java/hardware/arduino
 
-   On a Windows, move the RFduino folder and everything it contains in
+  On a Windows
 C:\Program Files (x86)\Arduino-1.5.x\hardware\arduino
 
-5. Move the OpenBCI_Radios folder from your downloads into:
+5. Download the [OpenBCI_Radios](https://github.com/OpenBCI/OpenBCI_Radios) repo from our github. You may also clone the repo into your libraries folder cited after step 6.
+
+6. Unzip the folder, and if it is named OpenBCI_Radios-master, rename it to just OpenBCI_Radios.
+
+
+7. Move the OpenBCI_Radios folder from your downloads into:
 
    On Mac:
 Documents/Arduino/libraries
@@ -48,7 +53,7 @@ C:\Users\username\Documents\Arduino\libraries
 
    If there is no 'libraries' folder in the above folder, create one.
 
-6. Open the Arduino IDE, restart the Arduino IDE if it was open.
+8. Open the Arduino IDE 1.5.8, restart the Arduino IDE if it was open.
 
 The files contained in the RFduino folder are custom builds for OpenBCI by our good friends over at RFdigital. Those guys are great! They helped us to squeeze all of the speed we could get out of the RFduinoGZLL library, and also gave us access to 25 discreet channels for OpenBCI boards to work on. ROCK!
 
@@ -137,7 +142,7 @@ This process does not require 3rd party hardware. Before you begin, note that th
 
 3. Plug the Dongle into your computer. Flip the switch to the `Reset` position if it is not already.
 
-4. Now go `Tools-->Port` and select the `COM` port (Windows)  or `/dev/tty.usbserial-*` port (Mac/Linux) for your device or 
+4. Now go `Tools-->Port` and select the `COM` port (Windows)  or `/dev/tty.usbserial-*` port (Mac/Linux) for your device or
 
 5. Click "Verify" on the toolbar (checkmark icon) to verify everything is ready. If you see `Done Compiling` then you are ready to go!
 
