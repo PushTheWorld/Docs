@@ -4,7 +4,7 @@ This discussion of the OpenBCI data format only applies to OpenBCI V3 (2014). Fo
 
 ### Proprietary ("RFDuino") vs Standard Bluetooth
 
-OpenBCI uses RFDuino modules for its Bluetooth wireless connection. To achieve the highest data rates, OpenBCI supplies a RFDuino USB dongle that connects to the computer. When using this USB dongle, higher data rates can be achieved versus using a standard bluetooth 4.n BLE connection. 
+OpenBCI uses RFDuino modules for its Bluetooth wireless connection. To achieve the highest data rates, OpenBCI supplies a RFDuino USB dongle that connects to the computer. When using this USB dongle, higher data rates can be achieved versus using a standard bluetooth 4.n BLE connection.
 
 If you prefer to use a standard bluetooth connection (to a mobile phone, for instance), that software and data format has not yet been defined.
 
@@ -23,7 +23,11 @@ The chipKIT on our 32bit Board does not go through a reset cycle when its serial
 
 ### Initiating Binary Transfer
 
-Once the OpenBCI has initialized itself and sent the $$$, it waits for commands. In other words, it sends no data until it is told to start sending data. To begin data transfer, transmit a single ASCII **b**. Once the **b** is received, continuous transfer of OpenBCI data in binary format will ensue. To turn off the fire hose, send an **s**. Both the Host and Device radios take notice of the **b** and **s**, and go into or out of streamingMode accordingly. That's right, the radio modules on both the OpenBCI board and the Dongle have two states:
+Once the OpenBCI has initialized itself and sent the $$$, it waits for commands. In other words, it sends no data until it is told to start sending data. To begin data transfer, transmit a single ASCII **b**. Once the **b** is received, continuous transfer of OpenBCI data in binary format will ensue. To turn off the fire hose, send an **s**.
+
+#### Firmware Version 1 (2014 to Fall 2016)
+
+Both the Host and Device radios take notice of the **b** and **s**, and go into or out of streamingMode accordingly. That's right, the radio modules on both the OpenBCI board and the Dongle have two states:
 
 * **!**streamingData
 	* The radios appear to be a transparent UART betweeen the PC and target uC
@@ -33,12 +37,16 @@ Once the OpenBCI has initialized itself and sent the $$$, it waits for commands.
 	* After 1 second of no transmission, or not getting 31 bytes in time, Device and Host will revert to **!**streamingData mode
 	* Command characters can be sent from PC following timing protocol above
 
+#### Firmware Version 2 (Fall 2016 to Now)
+
+There are no states in the new Device and Host radio code. However we had to introduce a packet format that **must** be followed when trying to send samples at 250Hz! You must send a one byte header `0x41` then by 31 bytes of data (your choice), followed by `0xCX` where X is 0-F in hex. This X is carried through to the PC/Driver and is described towards the end of the next section.
+
 ### Binary Format
 
 Each packet contains a header followed by a sample counter, followed by 8 ADS channel data, followed by the three axes values of the accelerometer, followed by a footer. The accelerometer data are optional, and don't need to be sent with every packet when used. if unused, the bytes will read 0. This allows for user defined auxiliary data to be sent in the last six bytes before the footer. Also, there may be room for compressing more samples. Here are details on the format.
 
-**Header** 
- 
+**Header**
+
 * Byte 1: 0xA0  
 * Byte 2: Sample Number
 
@@ -54,36 +62,78 @@ Note: values are 24-bit signed, MSB first
 * Bytes 21-23: Data value for EEG channel 6  
 * Bytes 24-26: Data value for EEG channel 8  
 
-**Accelerometer Data**  
-Note: values are 16-bit signed, MSB first
-
-* Bytes 27-28: Data value for accelerometer channel X  
-* Bytes 29-30: Data value for accelerometer channel Y  
-* Bytes 31-32: Data value for accelerometer channel Z  
+**Aux Data**
+* Bytes 27-32: 6 bytes of data defined and parsed based on the **Footer** below
 
 **Footer**  
 
-* Byte 33: 0xC0
+* Byte 33: 0xCX where X is 0-F in hex
 
-### 24-Bit Data Values
+#### Firmware Version 1 (2014 to Fall 2016)
+
+Stop Byte | Byte 27 | Byte 28 | Byte 29 | Byte 30 | Byte 31 | Byte 32
+--------- |:-------:|:-------:|:-------:|:-------:|:-------:|:------:
+0xC0 | AX1 | AX0 | AY1 | AY0 | AZ1 | AZ0
+
+AX1-AX0: Data value for accelerometer channel X
+AY1-AY0: Data value for accelerometer channel Y
+AZ1-AZ0: Data value for accelerometer channel Z
+
+#### Firmware Version 2 (Fall 2016 to Now)
+
+Stop Byte | Byte 27 | Byte 28 | Byte 29 | Byte 30 | Byte 31 | Byte 32 | Name
+--------- |:-------:|:-------:|:-------:|:-------:|:-------:|:------:|---
+0xC0 | AX1 | AX0 | AY1 | AY0 | AZ1 | AZ0| Standard with accel
+0xC1 | UDF | UDF | UDF | UDF | UDF | UDF | Standard with raw aux
+0xC2 | UDF | UDF | UDF | UDF | UDF | UDF | User defined
+0xC3 | AC | AV | T4 | T3 | T1 | T0 | Time stamped **_set_** with accel
+0xC4 | AC | AV | T4 | T3 | T1 | T0 | Time stamped with accel
+0xC5 | UDF | UDF | T4 | T3 | T1 | T0 | Time stamped **_set_** with raw aux
+0xC6 | UDF | UDF | T4 | T3 | T1 | T0 | Time stamped with raw aux
+
+AX1-AX0: Data value for accelerometer channel X
+AY1-AY0: Data value for accelerometer channel Y
+AZ1-AZ0: Data value for accelerometer channel Z
+
+We can still fit a 25Hz accelerometer in with time stamps due to some interlacing and timing constraints. Since we stream channel data at 250Hz and accelerometer at 25Hz; we have essentially 10 samples to send the accelerometer data in. When a `0xC3` or `0xC4` you should parse _Byte 27_ to indicate what _Byte 28_ is:
+
+AC | AV
+--- | ---
+'X' | AX1
+'x' | AX0
+'Y' | AY1
+'y' | AY0
+'Z' | AZ1
+'z' | AZ0
+
+Where _AC_ stands for accel code and is an ASCII character. An upper case signifies that _Byte 28_ is the upper 8 bits of the 16 bit signed integer, while a lower case character represents the lower 8 bits of the 16 bit signed integer. You combine both bytes to form the one number. For example, let's say a sample comes in with _AC_ equal to 'X', we would then store the value in _AV_ to a temporary variable. The next sample comes in with 'x' for it's _AC_ byte, we would then combine this sample's _Byte 28_ with the previous sample's _Byte 28_ and then convert as described in the section below called _16-Bit Signed Data Values_.
+
+T3-T0: 32 bit unsigned integer OpenBCI board time representing time since the board was started in ms. Simply store as an unsigned integer.
+
+`0xC3` and `0xC5` are special in that they contain the same exact data as their counter parts `0xC4` and `0xC5`. However `0xC3` and `0xC5` are only sent after the time stamp/sync (**<**) command is issued from the PC/Driver to the Board. When the Board parses a **<** it sets a flag high to send on the next sample a different end byte to allow for the PC/Driver to calculate a round trip response time.
+
+UDF stands for User Defined and for a general driver perspective, should be left alone and sent up to the user.
+
+### 24-Bit Signed Data Values
 
 For the EEG data values, you will note that we are transferring the data as a 24-bit signed integer, which is a bit unusual. We are using this number format because it is the native format used by the ADS1299 chip that is at the core of the OpenBCI board. To convert this unusual number format into a more standard 32-bit signed integer, you can steal some ideas from the example Processing (aka, Java) code:
 
     int interpret24bitAsInt32(byte[] byteArray) {     
-     int newInt = (  
+        int newInt = (  
          ((0xFF & byteArray[0]) << 16) |  
          ((0xFF & byteArray[1]) << 8) |   
          (0xFF & byteArray[2])  
-       );  
-     if ((newInt & 0x00800000) > 0) {  
-       newInt |= 0xFF000000;  
-     } else {  
-       newInt &= 0x00FFFFFF;  
-     }  
-    return newInt;  
+        );  
+        if ((newInt & 0x00800000) > 0) {  
+          newInt |= 0xFF000000;  
+        } else {  
+          newInt &= 0x00FFFFFF;  
+        }  
+        return newInt;  
     }  
-    
-###16-Bit Data Values
+
+### 16-Bit Signed Data Values
+
 The accelerometer data, if used, is sent as a 16bit signed value. We're using a similar scheme to convert these values into 32bit integers in Processing.
 
 	int interpret16bitAsInt32(byte[] byteArray) {
@@ -99,6 +149,10 @@ The accelerometer data, if used, is sent as a 16bit signed value. We're using a 
     	return newInt;
   	}
 
+### 32-Bit Unsigned Time Stamp
+
+To time stamp data, if used, is sent as a 32 bit unsigned integer representing time since the board was started in ms. We are using a different scheme to convert these values into 32 bit integers in Processing.
+
 ### Interpreting the EEG Data
 
 Once you receive and parse the data packets, it is important to know how to interpret the data so that the EEG values are useful in a quantitative way. The two critical pieces of information are (1) the sample rate and (2) the scale factor.
@@ -112,18 +166,16 @@ For the scale factor, this is the multiplier that you use to convert the EEG val
 
 Note that 2^23 might be an unexpected term in this equation considering that the ADS1299 is a 24-bit device. This equation is from the ADS1299 data sheet, specifically it is from the text surrounding Table 7. This scale factor has also been confirmed experimentally using known calibration signals.
 
-Accelerometer data must also be scaled before it can be correctly interpreted. The equation used to scale Accelerometer data is as follows (We assume 4Gs, so 2mG per digit): 
+Accelerometer data must also be scaled before it can be correctly interpreted. The equation used to scale Accelerometer data is as follows (We assume 4Gs, so 2mG per digit):
 
 
 	Accelerometer Scale Factor = 0.002 / 2^4
 
-###16 Channel Data 
+### 16 Channel Data
 Our 16 channel system allows for control of individual settings for all 16 channels, and data is retrieved from both ADS1299 IC at a rate of 250SPS. The current bandwith limitations on our serial radio links limit the number of packets we can send. To solve for this, we are sending data packet at the same rate of 250SPS, and alternating sample packets between the on Board ADS1299 and the on Daisy ADS1299. The method takes an average of the current and most recent channel values before sending to the radio. On **odd** sample numbers, the Board ADS1299 values are sent, and on **even** sample numbers, the Daisy ADS1299 samples are sent. When running the system with 16 channels, it is highly recommended that you use an SD card to store the raw (un-averaged) data for post processing.
 
 
 ###Room For Improvement
-
-**Chage baud rate on the fly.**  This would help increase data rate. However, we have not been able to increase the Board UART baud beyond 115200. The Dongle baud has been tested up to 1Mbaud.
 
 **Change protocol to meet other standards.** The over-air data is sent in packets (or frames, depending upon your preferred word). The maximum bytes allowed per packet is 32. We are reserving the first byte to use as a packet check-sum in our protocol. So the available bytes-per-packet, as far as the uC is concerned, is 31. The over-air protocol that the Dongle/RFduino Host gets is:
 
@@ -139,7 +191,7 @@ Our 16 channel system allows for control of individual settings for all 16 chann
 * Bytes 24-26: Data value for EEG channel 8  
 * Bytes 27-28: Data value for accelerometer channel X  
 * Bytes 29-30: Data value for accelerometer channel Y  
-* Bytes 31-32: Data value for accelerometer channel Z 
+* Bytes 31-32: Data value for accelerometer channel Z
 
 Our Host code removes the Packet Counter and adds the header and footer. It could be modified to work natively with other protocol specs for other signal processing software....
 
