@@ -100,9 +100,11 @@ AC | AV
 
 Where _AC_ stands for accel code and is an ASCII character. An upper case signifies that _Byte 28_ is the upper 8 bits of the 16 bit signed integer, while a lower case character represents the lower 8 bits of the 16 bit signed integer. You combine both bytes to form the one number. For example, let's say a sample comes in with _AC_ equal to 'X', we would then store the value in _AV_ to a temporary variable. The next sample comes in with 'x' for it's _AC_ byte, we would then combine this sample's _Byte 28_ with the previous sample's _Byte 28_ and then convert as described in the section below called _16-Bit Signed Data Values_.
 
+T3-T0: 32 bit unsigned integer OpenBCI board time representing time since the board was started in ms. Simply store as an unsigned integer.
 
+`0xC3` and `0xC5` are special in that they contain the same exact data as their counter parts `0xC4` and `0xC5`. However `0xC3` and `0xC5` are only sent after the time stamp/sync (**<**) command is issued from the PC/Driver to the Board. When the Board parses a **<** it sets a flag high to send on the next sample a different end byte to allow for the PC/Driver to calculate a round trip response time.
 
-**Note** UDF stands for User Defined.
+UDF stands for User Defined and for a general driver perspective, should be left alone and sent up to the user.
 
 ### 24-Bit Signed Data Values
 
