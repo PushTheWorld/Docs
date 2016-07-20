@@ -4,7 +4,7 @@ This discussion of the OpenBCI data format only applies to OpenBCI V3 (2014). Fo
 
 ### Proprietary ("RFDuino") vs Standard Bluetooth
 
-OpenBCI uses RFDuino modules for its Bluetooth wireless connection. To achieve the highest data rates, OpenBCI supplies a RFDuino USB dongle that connects to the computer. When using this USB dongle, higher data rates can be achieved versus using a standard bluetooth 4.n BLE connection. 
+OpenBCI uses RFDuino modules for its Bluetooth wireless connection. To achieve the highest data rates, OpenBCI supplies a RFDuino USB dongle that connects to the computer. When using this USB dongle, higher data rates can be achieved versus using a standard bluetooth 4.n BLE connection.
 
 If you prefer to use a standard bluetooth connection (to a mobile phone, for instance), that software and data format has not yet been defined.
 
@@ -37,8 +37,8 @@ Once the OpenBCI has initialized itself and sent the $$$, it waits for commands.
 
 Each packet contains a header followed by a sample counter, followed by 8 ADS channel data, followed by the three axes values of the accelerometer, followed by a footer. The accelerometer data are optional, and don't need to be sent with every packet when used. if unused, the bytes will read 0. This allows for user defined auxiliary data to be sent in the last six bytes before the footer. Also, there may be room for compressing more samples. Here are details on the format.
 
-**Header** 
- 
+**Header**
+
 * Byte 1: 0xA0  
 * Byte 2: Sample Number
 
@@ -54,36 +54,70 @@ Note: values are 24-bit signed, MSB first
 * Bytes 21-23: Data value for EEG channel 6  
 * Bytes 24-26: Data value for EEG channel 8  
 
-**Accelerometer Data**  
-Note: values are 16-bit signed, MSB first
-
-* Bytes 27-28: Data value for accelerometer channel X  
-* Bytes 29-30: Data value for accelerometer channel Y  
-* Bytes 31-32: Data value for accelerometer channel Z  
+**Aux Data**
+* Bytes 27-32: 6 bytes of data defined and parsed based on the **Footer** below
 
 **Footer**  
 
-* Byte 33: 0xC0
+* Byte 33: 0xCX where X is 0-F in hex
 
-### 24-Bit Data Values
+#### Firmware Version 1 (2014 to Fall 2016)
+
+Stop Byte | Byte 27 | Byte 28 | Byte 29 | Byte 30 | Byte 31 | Byte 32
+--------- |:-------:|:-------:|:-------:|:-------:|:-------:|:------:
+0xC0 | AX1 | AX0 | AY1 | AY0 | AZ1 | AZ0
+
+AX1-AX0: Data value for accelerometer channel X
+AY1-AY0: Data value for accelerometer channel Y
+AZ1-AZ0: Data value for accelerometer channel Z
+
+#### Firmware Version 2 (Fall 2016 to Now)
+
+Stop Byte | Byte 27 | Byte 28 | Byte 29 | Byte 30 | Byte 31 | Byte 32
+--------- |:-------:|:-------:|:-------:|:-------:|:-------:|:------:
+0xC0 | AX1 | AX0 | AY1 | AY0 | AZ1 | AZ0
+0xC1 | UDF | UDF | UDF | UDF | UDF | UDF
+0xC2 | UDF | UDF | UDF | UDF | UDF | UDF
+0xC3 | AC | AV | T4 | T3 | T1 | T0
+0xC4 | AC | AV | T4 | T3 | T1 | T0
+0xC5 | UDF | UDF | T4 | T3 | T1 | T0
+0xC6 | UDF | UDF | T4 | T3 | T1 | T0
+
+AX1-AX0: Data value for accelerometer channel X
+AY1-AY0: Data value for accelerometer channel Y
+AZ1-AZ0: Data value for accelerometer channel Z
+AC: Code to interpret AV
+AC | AV
+--- | ---
+'X' | AX1
+'x' | AX0
+'Y' | AY1
+'y' | AY0
+'Z' | AZ1
+'z' | AZ0
+
+**Note** UDF stands for User Defined.
+
+### 24-Bit Signed Data Values
 
 For the EEG data values, you will note that we are transferring the data as a 24-bit signed integer, which is a bit unusual. We are using this number format because it is the native format used by the ADS1299 chip that is at the core of the OpenBCI board. To convert this unusual number format into a more standard 32-bit signed integer, you can steal some ideas from the example Processing (aka, Java) code:
 
     int interpret24bitAsInt32(byte[] byteArray) {     
-     int newInt = (  
+        int newInt = (  
          ((0xFF & byteArray[0]) << 16) |  
          ((0xFF & byteArray[1]) << 8) |   
          (0xFF & byteArray[2])  
-       );  
-     if ((newInt & 0x00800000) > 0) {  
-       newInt |= 0xFF000000;  
-     } else {  
-       newInt &= 0x00FFFFFF;  
-     }  
-    return newInt;  
+        );  
+        if ((newInt & 0x00800000) > 0) {  
+          newInt |= 0xFF000000;  
+        } else {  
+          newInt &= 0x00FFFFFF;  
+        }  
+        return newInt;  
     }  
-    
-###16-Bit Data Values
+
+### 16-Bit Signed Data Values
+
 The accelerometer data, if used, is sent as a 16bit signed value. We're using a similar scheme to convert these values into 32bit integers in Processing.
 
 	int interpret16bitAsInt32(byte[] byteArray) {
@@ -99,6 +133,10 @@ The accelerometer data, if used, is sent as a 16bit signed value. We're using a 
     	return newInt;
   	}
 
+### 32-Bit Unsigned Time Stamp
+
+To time stamp data, if used, is sent as a 32 bit unsigned integer representing time since the board was started in ms. We are using a different scheme to convert these values into 32 bit integers in Processing.
+
 ### Interpreting the EEG Data
 
 Once you receive and parse the data packets, it is important to know how to interpret the data so that the EEG values are useful in a quantitative way. The two critical pieces of information are (1) the sample rate and (2) the scale factor.
@@ -112,12 +150,12 @@ For the scale factor, this is the multiplier that you use to convert the EEG val
 
 Note that 2^23 might be an unexpected term in this equation considering that the ADS1299 is a 24-bit device. This equation is from the ADS1299 data sheet, specifically it is from the text surrounding Table 7. This scale factor has also been confirmed experimentally using known calibration signals.
 
-Accelerometer data must also be scaled before it can be correctly interpreted. The equation used to scale Accelerometer data is as follows (We assume 4Gs, so 2mG per digit): 
+Accelerometer data must also be scaled before it can be correctly interpreted. The equation used to scale Accelerometer data is as follows (We assume 4Gs, so 2mG per digit):
 
 
 	Accelerometer Scale Factor = 0.002 / 2^4
 
-###16 Channel Data 
+### 16 Channel Data
 Our 16 channel system allows for control of individual settings for all 16 channels, and data is retrieved from both ADS1299 IC at a rate of 250SPS. The current bandwith limitations on our serial radio links limit the number of packets we can send. To solve for this, we are sending data packet at the same rate of 250SPS, and alternating sample packets between the on Board ADS1299 and the on Daisy ADS1299. The method takes an average of the current and most recent channel values before sending to the radio. On **odd** sample numbers, the Board ADS1299 values are sent, and on **even** sample numbers, the Daisy ADS1299 samples are sent. When running the system with 16 channels, it is highly recommended that you use an SD card to store the raw (un-averaged) data for post processing.
 
 
@@ -139,7 +177,7 @@ Our 16 channel system allows for control of individual settings for all 16 chann
 * Bytes 24-26: Data value for EEG channel 8  
 * Bytes 27-28: Data value for accelerometer channel X  
 * Bytes 29-30: Data value for accelerometer channel Y  
-* Bytes 31-32: Data value for accelerometer channel Z 
+* Bytes 31-32: Data value for accelerometer channel Z
 
 Our Host code removes the Packet Counter and adds the header and footer. It could be modified to work natively with other protocol specs for other signal processing software....
 
