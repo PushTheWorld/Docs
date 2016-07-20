@@ -1,7 +1,7 @@
 #Upload Code to OpenBCI Board
 
 ##Overview
-The OpenBCI 8bit and 32bit boards have powerful microcontrollers on them which ship with the latest OpenBCI firmware to interface with the on-board ADS1299, Accelerometer, and SD card. This totorial explains how to program the firmware using the OpenBCI Dongle and you PC. If we come out with a firmware upgrade, or if your or someone comes up with a custom program, you should use the following method for your particular board.
+The OpenBCI 8bit and 32bit boards have powerful microcontrollers on them which ship with the latest OpenBCI firmware to interface with the on-board ADS1299, Accelerometer, and SD card. This tutorial explains how to program the firmware using the OpenBCI Dongle and you PC. If we come out with a firmware upgrade, or if your or someone comes up with a custom program, you should use the following method for your particular board.
 
 ##32bit Upload How-To
 **You will need:**
@@ -18,16 +18,9 @@ First, install the version 1.6.5 of Arduino IDE which can be found here:
 
 https://www.arduino.cc/en/Main/OldSoftwareReleases#previous
 
-***Note***: To upload code to the OpenBCI board, you need 1.6.5, while you need 1.5.8 to upload code to the dongle. If you have already installed 1.5.8, you may see an error message while installing 1.6.5 saying that you need to uninstall 1.5.8. Instead of doing that, simply move the existing "Arduino" program folder (which should be 1.5.8) in your Program Files to another folder (such as "Documents"). Go to your program manager (called "Change or Remove Program" in Windows, press Uninstall Arduino 1.6.5, and confirm if told that there was an error in uninstalling 1.6.5. Then, install 1.6.5. Rename the new "Arduino" program folder (which should now be 1.6.5) to "Arduino 1.6.5", and rename the Arduino folder that you moved to the name "Arduino 1.5.8". Move this folder back to your Program Files where "Arduino 1.6.5" is located, allowing you to keep both versions.
-
-Windows users: While installing 1.6.5 if the installer instructs you to uninstall 1.5.8, move the Arduino folder from `Program Files (x86)` to your downloads folder. Rename this folder to `Arduino_1.5.8`. Open the `Change or remove program` app in control panel and uninstall the Arduino application. There will be a popup indicating that the files do not exist and asking if you want to remove the program from the files list, select yes. Then install 1.6.5 as normal. Navigate to back to your `Program Files (x86)` folder and locate the Arduino folder. Rename this folder to `Arduino_1.6.5`. Now drag and drop the `Arduino_1.5.8` back into `Program Files (x86)` folder.  
+**Note for Windows users** While installing 1.6.5 if the installer instructs you to uninstall 1.5.8, move the Arduino folder from `Program Files (x86)` to your downloads folder. Rename this folder to `Arduino_1.5.8`. Open the `Change or remove program` app in control panel and uninstall the Arduino application. There will be a popup indicating that the files do not exist and asking if you want to remove the program from the files list, select yes. Then install 1.6.5 as normal. Navigate to back to your `Program Files (x86)` folder and locate the Arduino folder. Rename this folder to `Arduino_1.6.5`. Now drag and drop the `Arduino_1.5.8` back into `Program Files (x86)` folder.  
 
 Download the [OpenBCI_32bit_Library](https://github.com/OpenBCI/OpenBCI_32bit_Library) repo from our github.
-
-* OpenBCI_32bit
-	* This is the firmware that runs on the OpenBCI 32bit Board
-* OBCI_SD
-	* Supports writing raw data to on-board SD card
 
 Unzip the folder, and if it is named `OpenBCI_32bit_Library-master`, rename it to just `OpenBCI_32bit_Library`.
 

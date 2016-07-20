@@ -15,31 +15,35 @@ This page covers how the radio link works, and how to upload new firmware to the
 
 * Computer (Windows or Mac or Other)
 * Arduino IDE Version 1.5.8 BETA
-* Custom RFduino libraries for OpenBCI
+* Custom [RFduino libraries for OpenBCI](https://github.com/OpenBCI/OpenBCI_RFduino/archive/master.zip)
 * A 0.1uF capacitor (see Device section below)
 
 **Steps:**
 
 1. Download and install the [Arduino IDE Version 1.5.8 BETA](http://www.arduino.cc/en/Main/OldSoftwareReleases#1.5.x).
->>>>>>> Added steps, enhanced instructions for mac, and improved an image.
 
    On Windows be sure to download the file marked `Windows Installer`.
 
    On Mac download the `MAC OS X` version, unzip the app and move it into Applications folder, and then install Java 6 if prompted.
 
-2. Download the [OpenBCI_Radios](https://github.com/OpenBCI/OpenBCI_Radios) repo from our github.
+2. Download the [OpenBCI_RFduino](https://github.com/OpenBCI/OpenBCI_RFduino/archive/master.zip) repo from our github.
 
-3. Unzip the folder, and if it is named OpenBCI_Radios-master, rename it to just OpenBCI_Radios.
+3. Unzip the folder.
 
-4. Now move the folder from OpenBCI_Radios/libraries called RFduino to:
+4. Now move the folder called RFduino and everything it contains to:
 
-   On a Mac, move the RFduino folder and everything it contains in
+  On a Mac
 /Applications/Arduino.app/Contents/Resources/Java/hardware/arduino
 
-   On a Windows, move the RFduino folder and everything it contains in
+  On a Windows
 C:\Program Files (x86)\Arduino-1.5.x\hardware\arduino
 
-5. Move the OpenBCI_Radios folder from your downloads into:
+5. Download the [OpenBCI_Radios](https://github.com/OpenBCI/OpenBCI_Radios) repo from our github. You may also clone the repo into your libraries folder cited after step 6.
+
+6. Unzip the folder, and if it is named OpenBCI_Radios-master, rename it to just OpenBCI_Radios.
+
+
+7. Move the OpenBCI_Radios folder from your downloads into:
 
    On Mac:
 Documents/Arduino/libraries
@@ -49,11 +53,11 @@ C:\Users\username\Documents\Arduino\libraries
 
    If there is no 'libraries' folder in the above folder, create one.
 
-6. Open the Arduino IDE, restart the Arduino IDE if it was open.
+8. Open the Arduino IDE 1.5.8, restart the Arduino IDE if it was open.
 
 The files contained in the RFduino folder are custom builds for OpenBCI by our good friends over at RFdigital. Those guys are great! They helped us to squeeze all of the speed we could get out of the RFduinoGZLL library, and also gave us access to 25 discreet channels for OpenBCI boards to work on. ROCK!
 
-***Note***: To upload code to the OpenBCI board, you need 1.6.5, while you need 1.5.8 to upload code to the dongle. If you have already installed 1.6.5, you may see an error message while installing 1.5.8 saying that you need to uninstall 1.6.5. Instead of doing that, simply move the existing "Arduino" program folder (which should be 1.6.5) in your Program Files to another folder (such as "Documents"). Go to your program manager (called "Change or Remove Program" in Windows, press Uninstall Arduino 1.5.8, and confirm if told that there was an error in uninstalling 1.5.8. Then, install 1.5.8. Rename the new "Arduino" program folder (which should now be 1.5.8) to "Arduino 1.5.8", and rename the Arduino folder that you moved to the name "Arduino 1.6.5". Move this folder back to your Program Files where "Arduino 1.5.8" is located, allowing you to keep both versions.
+**Note for Windows users** While installing 1.5.8 if the installer instructs you to uninstall 1.6.5, move the Arduino folder from `Program Files (x86)` to your downloads folder. Rename this folder to `Arduino_1.6.5`. Open the `Change or remove program` app in control panel and uninstall the Arduino application. There will be a popup indicating that the files do not exist and asking if you want to remove the program from the files list, select yes. Then install 1.5.8 as normal. Navigate to back to your `Program Files (x86)` folder and locate the Arduino folder. Rename this folder to `Arduino_1.5.8`. Now drag and drop the `Arduino_1.6.5` back into `Program Files (x86)` folder.  
 
 #Uploading Device Firmware to OpenBCI Board
 
