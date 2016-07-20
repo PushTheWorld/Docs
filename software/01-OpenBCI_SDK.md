@@ -214,7 +214,7 @@ Start time stamping and resynchronize command. The Host radio will send a **,** 
 Stops time stamping. If the Board is not streaming, then expect a response of `Time stamp OFF$$$`; however if the board is streaming, then you will get a response in a different **stop byte** as described in the next software document titled _OpenBCI Streaming Data Format_.
 
 
-##Radio Configuration Commands
+## Radio Configuration Commands
 As of firmware version `v2`, a set of commands has been implemented to change the radio system and improve over-the-air programming of the main OpenBCI board.
 In order to use the commands you must keep to the form of key-code-(payload) where key is`0xF0`, code is defined below and payload is optional and dependent on the code. For example, to get system status send `0xF0` then send `0x07`.
 
