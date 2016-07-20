@@ -1,7 +1,7 @@
 #Upload Code to OpenBCI Board
 
 ##Overview
-The OpenBCI 8bit and 32bit boards have powerful microcontrollers on them which ship with the latest OpenBCI firmware to interface with the on-board ADS1299, Accelerometer, and SD card. This totorial explains how to program the firmware using the OpenBCI Dongle and you PC. If we come out with a firmware upgrade, or if your or someone comes up with a custom program, you should use the following method for your particular board.
+The OpenBCI 8bit and 32bit boards have powerful microcontrollers on them which ship with the latest OpenBCI firmware to interface with the on-board ADS1299, Accelerometer, and SD card. This tutorial explains how to program the firmware using the OpenBCI Dongle and you PC. If we come out with a firmware upgrade, or if your or someone comes up with a custom program, you should use the following method for your particular board.
 
 ##8bit Upload How-To
 **You will need:**
@@ -23,8 +23,8 @@ You will need to install these files from our repository into your Documents/ard
 	* Supports writing raw data to on-board SD card
 * OpenBCI_8
 	* The OpenBCI 8bit Library
-	
-	
+
+
 ![ArduinoIDE](../assets/images/Arduino_IDE.png)
 
 Move the file OpenBCI_8bit_SD.ino into your Documents/arduino folder, and start up the Arduino IDE. you should then see the sketch in your Sketch folder.
@@ -35,7 +35,7 @@ Select Arduino UNO from the Board drop-down menu.
 
 ![selectSerialPort](../assets/images/SerialPortSelect.png)
 
-Select the correct serial port for your OpenBCI Dongle. 
+Select the correct serial port for your OpenBCI Dongle.
 
 * On Macs, this will be named **/dev/tty.usbserial-DN00nnnn** where the nnnn is a combination of numbers and letters specific to your openBCI Dongle.
 
@@ -51,7 +51,7 @@ When you are happy with the code, simply press upload to program the OpenBCI 8bi
 ##32bit Upload How-To
 **You will need:**
 
-* Computer running version [1.6.5](https://www.arduino.cc/en/Main/OldSoftwareReleases#previous) of Arduino IDE 
+* Computer running version [1.6.5](https://www.arduino.cc/en/Main/OldSoftwareReleases#previous) of Arduino IDE
 * OpenBCI Dongle connected to USB port
 * OpenBCI 32bit Board with battery power
 
@@ -65,9 +65,9 @@ https://www.arduino.cc/en/Main/OldSoftwareReleases#previous
 
 Windows users: While installing 1.6.5 if the installer instructs you to uninstall 1.5.8, move the Arduino folder from `Program Files (x86)` to your downloads folder. Rename this folder to `Arduino_1.5.8`. Open the `Change or remove program` app in control panel and uninstall the Arduino application. There will be a popup indicating that the files do not exist and asking if you want to remove the program from the files list, select yes. Then install 1.6.5 as normal. Navigate to back to your `Program Files (x86)` folder and locate the Arduino folder. Rename this folder to `Arduino_1.6.5`. Now drag and drop the `Arduino_1.5.8` back into `Program Files (x86)` folder.
 
-Download the [OpenBCI_32bit_Library](https://github.com/OpenBCI/OpenBCI_32bit_Library) repo from our github. 
+Download the [OpenBCI_32bit_Library](https://github.com/OpenBCI/OpenBCI_32bit_Library) repo from our github.
 
-Unzip the folder, and if it is named `OpenBCI_32bit_Library-master`, rename it to just `OpenBCI_32bit_Library`. 
+Unzip the folder, and if it is named `OpenBCI_32bit_Library-master`, rename it to just `OpenBCI_32bit_Library`.
 
 Move the OpenBCI_32bit_Library folder from your downloads into:
 On Mac:
@@ -75,7 +75,7 @@ Documents/Arduino/libraries
 On Windows:
 C:\Users\username\Documents\Arduino\libraries
 
-If there is no 'libraries' folder in the sketch folder, create one. 
+If there is no 'libraries' folder in the sketch folder, create one.
 
 Move the folder `OBCI32_SD` from OpenBCI_32bit_Library/libraries to:
 On Mac:
@@ -83,19 +83,19 @@ Documents/Arduino/libraries
 On Windows:
 C:\Users\username\Documents\Arduino\libraries
 
-Before you can upload code correctly to the PIC32 with Arduino, you need to add the chipKIT-core board files to your Arduino IDE. Follow the instructions to download and install the latest chipKIT-core hardware files [from the chipKIT-core wiki](http://chipkit.net/wiki/index.php?title=ChipKIT_core). ***NOTE*** You must follow the wiki instructions  **2) Manual install by copying ZIP file** from the chipKIT site. 
+Before you can upload code correctly to the PIC32 with Arduino, you need to add the chipKIT-core board files to your Arduino IDE. Follow the instructions to download and install the latest chipKIT-core hardware files [from the chipKIT-core wiki](http://chipkit.net/wiki/index.php?title=ChipKIT_core). ***NOTE*** You must follow the wiki instructions  **2) Manual install by copying ZIP file** from the chipKIT site.
 
 ***ASLO NOTE*** You must use the Test Build from 2015-10-18 *ONLY*
 
 ![board_dropdown](../assets/images/OBCI32_Board_Dropdown.png)
 
-In the Arduino IDE 1.6.5 go `File-->Examples-->OpenBCI_32bit_Library-->DefaultBoard` which will launch the Host firmware. 
+In the Arduino IDE 1.6.5 go `File-->Examples-->OpenBCI_32bit_Library-->DefaultBoard` which will launch the Host firmware.
 
 Make sure that the slide switch on the OpenBCI Dongle is switched to the GPIO6 selection. If it's on the other side, it will try to program the Dongle-mounted RFduino! Now is a good time to plug your Dongle in and power down the Board.
 
 ![serial_port](../assets/images/PortSelect.png)
 
-Select the correct serial port for your OpenBCI Dongle. 
+Select the correct serial port for your OpenBCI Dongle.
 
 * On Macs, this will be named **/dev/tty.usbserial-DN00nnnn** where the nnnn is a combination of numbers and letters specific to your openBCI Dongle.
 
