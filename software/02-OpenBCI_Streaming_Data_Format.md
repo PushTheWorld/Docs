@@ -23,7 +23,11 @@ The chipKIT on our 32bit Board does not go through a reset cycle when its serial
 
 ### Initiating Binary Transfer
 
-Once the OpenBCI has initialized itself and sent the $$$, it waits for commands. In other words, it sends no data until it is told to start sending data. To begin data transfer, transmit a single ASCII **b**. Once the **b** is received, continuous transfer of OpenBCI data in binary format will ensue. To turn off the fire hose, send an **s**. Both the Host and Device radios take notice of the **b** and **s**, and go into or out of streamingMode accordingly. That's right, the radio modules on both the OpenBCI board and the Dongle have two states:
+Once the OpenBCI has initialized itself and sent the $$$, it waits for commands. In other words, it sends no data until it is told to start sending data. To begin data transfer, transmit a single ASCII **b**. Once the **b** is received, continuous transfer of OpenBCI data in binary format will ensue. To turn off the fire hose, send an **s**.
+
+#### Firmware Version 1 (2014 to Fall 2016)
+
+Both the Host and Device radios take notice of the **b** and **s**, and go into or out of streamingMode accordingly. That's right, the radio modules on both the OpenBCI board and the Dongle have two states:
 
 * **!**streamingData
 	* The radios appear to be a transparent UART betweeen the PC and target uC
@@ -32,6 +36,10 @@ Once the OpenBCI has initialized itself and sent the $$$, it waits for commands.
 	* Device radio expects to get 31 bytes in each data packet from the uC
 	* After 1 second of no transmission, or not getting 31 bytes in time, Device and Host will revert to **!**streamingData mode
 	* Command characters can be sent from PC following timing protocol above
+
+#### Firmware Version 2 (Fall 2016 to Now)
+
+There are no states in the new Device and Host radio code. However we had to introduce a packet format that **must** be followed when trying to send samples at 250Hz! You must send a one byte header `0x41` then by 31 bytes of data (your choice), followed by `0xCX` where X is 0-F in hex. This X is carried through to the PC/Driver and is described towards the end of the next section.
 
 ### Binary Format
 
@@ -168,8 +176,6 @@ Our 16 channel system allows for control of individual settings for all 16 chann
 
 
 ###Room For Improvement
-
-**Chage baud rate on the fly.**  This would help increase data rate. However, we have not been able to increase the Board UART baud beyond 115200. The Dongle baud has been tested up to 1Mbaud.
 
 **Change protocol to meet other standards.** The over-air data is sent in packets (or frames, depending upon your preferred word). The maximum bytes allowed per packet is 32. We are reserving the first byte to use as a packet check-sum in our protocol. So the available bytes-per-packet, as far as the uC is concerned, is 31. The over-air protocol that the Dongle/RFduino Host gets is:
 
