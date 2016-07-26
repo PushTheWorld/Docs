@@ -45,7 +45,7 @@ If there is no 'libraries' folder in the sketch folder, create one.
 C:\Users\username\Documents\Arduino\libraries
 
 
-8. Before you can upload code correctly to the PIC32 with Arduino, you need to add the chipKIT-core board files to your Arduino IDE. Follow the instructions to download and install the latest chipKIT-core hardware files [from the chipKIT-core wiki](http://chipkit.net/wiki/index.php?title=ChipKIT_core). ***NOTE*** You must follow the wiki instructions  **2) Manual install by copying ZIP file** from the chipKIT site. ***ALSO NOTE*** You must use the Test Build from 2015-10-18 *ONLY*
+8. Before you can upload code correctly to the PIC32 with Arduino, you need to add the chipKIT-core board files to your Arduino IDE. ***NOTE*** You must follow the wiki instructions **2) Manual install by copying ZIP file** from the chipKIT site. ***ALSO NOTE*** You must use the Test Build from 2015-10-18 *ONLY* Follow the instructions to download and install the latest chipKIT-core hardware files [from the chipKIT-core wiki](http://chipkit.net/wiki/index.php?title=ChipKIT_core).
 
 ![board_dropdown](../assets/images/OBCI32_Board_Dropdown.png)
 
