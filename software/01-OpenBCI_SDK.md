@@ -245,6 +245,9 @@ Returns success and sends the BAUD rate in ASCII (115200).
 ####Set BAUD to High-Speed mode (230400) `0x06`
 Returns success and sends the BAUD rate in ASCII (230400).
 
+####Set BAUD to Hyper-Speed mode (921600) `0x0A`
+Returns success and sends the BAUD rate in ASCII (921600).
+
 ####Check if System is Up `0x07`
 Returns success or failure. On failure it will send a "system is down" message. On success, it will send a "system is up" message.
 
