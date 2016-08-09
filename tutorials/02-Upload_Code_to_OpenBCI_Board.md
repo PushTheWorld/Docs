@@ -127,6 +127,9 @@ When you are happy with the code, simply press upload to program the OpenBCI 8bi
 
 ## Troubleshooting
 
+If you're having an issue with `Board_Defs.h` and you're uploading using Linux, you must move ALL files located in: <br/> `/Arduino/hardware/chipkit-core/pic32/variants/openbci/` to `/Arduino/hardware/chipkit-core/pic32/cores/pic32/`<br/> This should fix any issues you're having compiling.
+
+
 If the upload fails with `No Target Found`:
 
 1. Unplug the Dongle and Device.
