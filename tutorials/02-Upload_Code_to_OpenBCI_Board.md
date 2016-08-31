@@ -20,7 +20,7 @@ https://www.arduino.cc/en/Main/OldSoftwareReleases#previous
 
 **Note for Windows users** While installing 1.6.5 if the installer instructs you to uninstall 1.5.8, move the Arduino folder from `Program Files (x86)` to your downloads folder. Rename this folder to `Arduino_1.5.8`. Open the `Change or remove program` app in control panel and uninstall the Arduino application. There will be a popup indicating that the files do not exist and asking if you want to remove the program from the files list, select yes. Then install 1.6.5 as normal. Navigate to back to your `Program Files (x86)` folder and locate the Arduino folder. Rename this folder to `Arduino_1.6.5`. Now drag and drop the `Arduino_1.5.8` back into `Program Files (x86)` folder.  
 
-2. Download the [OpenBCI_32bit_Library](https://github.com/OpenBCI/OpenBCI_32bit_Library) repo from our github.
+2. Download the [OpenBCI_32bit_Library 2.0.0 Firmware](https://github.com/OpenBCI/OpenBCI_32bit_Library/tree/2.0.0) repo from our github. (Once 2.0.0 is merged with master this will link to master instead of a branch)
 
 3. Unzip the folder, and if it is named `OpenBCI_32bit_Library-master`, rename it to just `OpenBCI_32bit_Library`.
 

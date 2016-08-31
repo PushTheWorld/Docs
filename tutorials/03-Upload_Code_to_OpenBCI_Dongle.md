@@ -42,7 +42,7 @@ C:\Program Files (x86)\Arduino-1.5.x\hardware\arduino
 arduino-1.5.8/hardware/arduino
 
 **NOTE FOR LINUX USERS**
-Linux users will need to have the program [wine](https://www.winehq.org/) installed in order to continue. There is a dependency for the arduino code that requires the running  `RFDLoader.exe` to continue. 
+Linux users will need to have the program [wine](https://www.winehq.org/) installed in order to continue. There is a dependency for the arduino code that requires the running  `RFDLoader.exe` to continue.
 In order to run this .exe, do the following:
 
   1. Navigate to the /hardware/arduino/RFduino folder
@@ -52,7 +52,7 @@ In order to run this .exe, do the following:
 
 That's it! As long as `wine` is installed normally the script should take care of any issues you may have when uploading.
 
-5. Download the [OpenBCI_Radios](https://github.com/OpenBCI/OpenBCI_Radios) repo from our github. You may also clone the repo into your libraries folder cited after step 6.
+5. Download the [OpenBCI_Radios 2.0.0 Firmware](https://github.com/OpenBCI/OpenBCI_Radios/tree/2.0.0) repo from our github. You may also clone the repo into your libraries folder cited after step 6. (Once 2.0.0 is merged with master this will link to master instead of a branch)
 
 6. Unzip the folder, and if it is named OpenBCI_Radios-master, rename it to just OpenBCI_Radios.
 
