@@ -68,6 +68,10 @@ C:\Users\username\Documents\Arduino\libraries
 
 8. Open the Arduino IDE 1.5.8, restart the Arduino IDE if it was open.
 
+9. Select `RFDuino` from `Tools -> Board -> RFDuino`
+
+10. Upload!
+
 The files contained in the RFduino folder are custom builds for OpenBCI by our good friends over at RFdigital. Those guys are great! They helped us to squeeze all of the speed we could get out of the RFduinoGZLL library, and also gave us access to 25 discreet channels for OpenBCI boards to work on. ROCK!
 
 **Note for Windows users** While installing 1.5.8 if the installer instructs you to uninstall 1.6.5, move the Arduino folder from `Program Files (x86)` to your downloads folder. Rename this folder to `Arduino_1.6.5`. Open the `Change or remove program` app in control panel and uninstall the Arduino application. There will be a popup indicating that the files do not exist and asking if you want to remove the program from the files list, select yes. Then install 1.5.8 as normal. Navigate to back to your `Program Files (x86)` folder and locate the Arduino folder. Rename this folder to `Arduino_1.5.8`. Now drag and drop the `Arduino_1.6.5` back into `Program Files (x86)` folder.  
@@ -85,7 +89,7 @@ The idea here is to use the FTDI chip on the Dongle to bridge USB to Serial for 
 
 ![dongleWithHeaders](../assets/images/dongleHeaders.jpg)
 
-First, solder the headers that came with your OpenBCI Dongle. Then, move the switch to the RESET position, and upload some dummy code to the Dongle radio so that it doesn't interfere with the Serial upload process. Go to the Arduino IDE 1.5.8 and do `File-->Examples-->OpenBCI_Radios-->RadioPassThru32bit`. Now hit the upload button, it's the button to the right of the check mark in the top left of the IDE. After uploading, make sure to move the switch back over to the GPIO6 side!
+First, solder the headers that came with your OpenBCI Dongle. Then, move the switch to the RESET position, and upload some dummy code to the Dongle radio so that it doesn't interfere with the Serial upload process. Go to the Arduino IDE 1.5.8 and do `File-->Examples-->OpenBCI_Radios-->RadioPassThru32bit`. Make sure to select `RFDuino` from `Tools -> Board -> RFDuino`. Now hit the upload button, it's the button to the right of the check mark in the top left of the IDE. After uploading, make sure to move the switch back over to the GPIO6 side!
 
 ![0.1uF capacitors](../assets/images/caps.jpg)
 
